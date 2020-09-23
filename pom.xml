@@ -12,7 +12,7 @@
 	<artifactId>cloud-zuul-server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>registrocontable-cloud-zuul-server</name>
-	<description>Servidor de configuración distribuida</description>
+	<description>Servidor de api gateway</description>
 
 	<properties>
 		<java.version>14</java.version>

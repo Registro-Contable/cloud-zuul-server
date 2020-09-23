@@ -1,4 +1,5 @@
 spring:
   application:
     name: servicio-zuul-server
-      cloud:    config:      uri:      - http://localhost:8888
+      cloud:    config:
+      profile: local      uri:      - http://localhost:8888
