@@ -1,70 +1,70 @@
-name: Build artifacts workflow
-
-on:
-  push:
-    branches:
-      - 'master'
-
-jobs:
-  artifact:
-    name: Publish artifact - GitHub Packages
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK 14
-        uses: actions/setup-java@v1
-        with:
-          java-version: 14
-          server-id: github
-      - name: Configure Git user
-        run: |
-          git config user.email "actions@github.com"
-          git config user.name "GitHub Actions"
-      - name: Prepare
-        id: prep
-        run: |
-          ARTIFACT=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)
-          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          echo ::set-output name=artifact::${ARTIFACT}
-          echo ::set-output name=version::${VERSION}
-      - name: Publish artifact on GitHub Packages
-        run: mvn -B clean deploy -DskipTests
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Create Release tag
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v${{ steps.prep.outputs.version }}
-          release_name: Release v${{ steps.prep.outputs.version }}
-          
-  docker:
-    name: Publish docker - DockerHub Packages
-    runs-on: ubuntu-latest
-    env:
-      REPO: registrocontable
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK 14
-        uses: actions/setup-java@v1
-        with:
-          java-version: 14
-      - name: Prepare
-        id: prep
-        run: |
-          ARTIFACT=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)
-          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          echo ::set-output name=artifact::${ARTIFACT}
-          echo ::set-output name=version::${VERSION}
-      - name: Build artifact with maven
-        run: mvn -B clean package -DskipTests
-      - name: Login to Docker Hub
-        run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASS }}
-      - name: Build Docker image
-        run: docker build -t $REPO/${{ steps.prep.outputs.artifact }}:latest -t $REPO/${{ steps.prep.outputs.artifact }}:${{ steps.prep.outputs.version }} .
-      - name: Publish Docker image
-        run: docker push $REPO/${{ steps.prep.outputs.artifact }}
+#name: Build artifacts workflow
+#
+#on:
+#  push:
+#    branches:
+#      - 'master'
+#
+#jobs:
+#  artifact:
+#    name: Publish artifact - GitHub Packages
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: Set up JDK 14
+#        uses: actions/setup-java@v1
+#        with:
+#          java-version: 14
+#          server-id: github
+#      - name: Configure Git user
+#        run: |
+#          git config user.email "actions@github.com"
+#          git config user.name "GitHub Actions"
+#      - name: Prepare
+#        id: prep
+#        run: |
+#          ARTIFACT=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)
+#          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+#          echo ::set-output name=artifact::${ARTIFACT}
+#          echo ::set-output name=version::${VERSION}
+#      - name: Publish artifact on GitHub Packages
+#        run: mvn -B clean deploy -DskipTests
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      - name: Create Release tag
+#        id: create_release
+#        uses: actions/create-release@v1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          tag_name: v${{ steps.prep.outputs.version }}
+#          release_name: Release v${{ steps.prep.outputs.version }}
+#          
+#  docker:
+#    name: Publish docker - DockerHub Packages
+#    runs-on: ubuntu-latest
+#    env:
+#      REPO: registrocontable
+#
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: Set up JDK 14
+#        uses: actions/setup-java@v1
+#        with:
+#          java-version: 14
+#      - name: Prepare
+#        id: prep
+#        run: |
+#          ARTIFACT=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)
+#          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+#          echo ::set-output name=artifact::${ARTIFACT}
+#          echo ::set-output name=version::${VERSION}
+#      - name: Build artifact with maven
+#        run: mvn -B clean package -DskipTests
+#      - name: Login to Docker Hub
+#        run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASS }}
+#      - name: Build Docker image
+#        run: docker build -t $REPO/${{ steps.prep.outputs.artifact }}:latest -t $REPO/${{ steps.prep.outputs.artifact }}:${{ steps.prep.outputs.version }} .
+#      - name: Publish Docker image
+#        run: docker push $REPO/${{ steps.prep.outputs.artifact }}
