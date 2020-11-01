@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  cloud-config-server:
+    image: "registro-contable/cloud-zuul-server:${TAG}"
+    ports:
+      - "8080:8080"
+    container_name: cloud-zuul-server
+    environment:
+      - spring.cloud.config.profile=development
+      - spring.cloud.config.uri=http://192.168.1.5:8888
