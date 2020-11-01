@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.victorlh.registrocontable</groupId>
 	<artifactId>cloud-zuul-server</artifactId>
-	<version>0.1.1-SNAPSHOT</version>
+	<version>0.1.2-SNAPSHOT</version>
 
 	<name>registrocontable-cloud-zuul-server</name>
 	<description>Servidor de api gateway</description>
@@ -99,10 +99,13 @@
 	</scm>
 
 	<distributionManagement>
+		<snapshotRepository>
+			<id>nexus</id>
+			<url>http://192.168.1.5:8081/repository/registro-contable-snapshot/</url>
+		</snapshotRepository>
 		<repository>
-			<id>github</id>
-			<name>GitHub</name>
-			<url>https://maven.pkg.github.com/${git.repository}</url>
+			<id>nexus</id>
+			<url>http://192.168.1.5:8081/repository/registro-contable-releases/</url>
 		</repository>
 	</distributionManagement>
 
