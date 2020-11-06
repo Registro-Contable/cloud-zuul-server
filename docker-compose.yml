@@ -5,7 +5,7 @@ networks:
     external: true
 
 services:
-  cloud-config-server:
+  cloud-zuul-server:
     image: "registro-contable/cloud-zuul-server:${TAG}"
     ports:
       - "8080:8080"
