@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.victorlh.registrocontable</groupId>
 	<artifactId>cloud-zuul-server</artifactId>
-	<version>0.1.2-SNAPSHOT</version>
+	<version>0.1.3-SNAPSHOT</version>
 
 	<name>registrocontable-cloud-zuul-server</name>
 	<description>Servidor de api gateway</description>
